@@ -67,3 +67,7 @@ plt.ylabel('Density')
 <div align="center">
   <img src="figures/m5_scores.png">
 </div>
+
+To reproduce, run:
+    
+    $ python single_hash.py

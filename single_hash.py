@@ -93,7 +93,7 @@ def search_random(m, N):
     print('Worst score:', max_score, max_Q)
 
     plt.hist(list(zip(*score_Q))[0], bins=100, normed=True)
-    plt.xlabel('Number probes')
+    plt.xlabel('Probes per insertion')
     plt.ylabel('Density')
     plt.savefig('m%d_scores.png' % m)
 
@@ -101,4 +101,4 @@ def search_random(m, N):
 
 
 if __name__ == '__main__':
-    search_random(10, 10000)
+    search_random(5, 10000)
