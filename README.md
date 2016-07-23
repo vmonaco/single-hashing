@@ -1,10 +1,7 @@
-single-hashing
-==============
+# Single hashing
 
-Functions to determine the efficiency of a single hashing scheme.
+Single hashing is a generalized hashing technique described by [Knuth](https://www.maa.org/sites/default/files/pdf/upload_library/22/Ford/DonaldKnuth.pdf).
 
-recursive.py contains very elegant but slow implementations.
-
-iterative.py contains faster and slightly more obscure functions.
-
-See the main() in each for some usage examples.
+<div align="center">
+  <img src="figures/matrix1.svg">
+</div>
