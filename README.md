@@ -5,3 +5,9 @@ Single hashing is a generalized hashing technique described by [Knuth](https://w
 <div align="center">
   <img src="figures/matrix1.png">
 </div>
+
+Cyclic scheme.
+
+<div align="center">
+  <img src="figures/matrix2.png">
+</div>
