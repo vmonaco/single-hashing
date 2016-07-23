@@ -3,13 +3,8 @@ Created on Nov 20, 2012
 
 @author: vinnie
 '''
-
-import cProfile
-import numpy as np
-from pprint import pprint
-from operator import itemgetter
-from itertools import combinations
 from utils import *
+
 
 def in1d_running(q, A):
     '''
@@ -21,13 +16,15 @@ def in1d_running(q, A):
         j += 1
     return j
 
+
 def s_A(Q, A):
     '''
     s(A) = {(i,j) | q[i,k] in A for 0 <= k <= j}
     The set of all coordinates where Q[i,0:k] is in A for 0 <= k <= j, 
     where j is defined by the ind1d_running function above 
     '''
-    return [(i,k) for i in A for k in xrange(in1d_running(Q[i], A))]
+    return [(i, k) for i in A for k in range(in1d_running(Q[i], A))]
+
 
 def P(Q, A, m):
     '''
@@ -38,10 +35,11 @@ def P(Q, A, m):
     if len(A) == 0:
         return 0
     elif len(A) == 1:
-        return 1.0/m
+        return 1.0 / m
     else:
-        return (1.0/m) * sum([P(Q, tuple(a for a in A if a != Q[i][j]), m) 
-                              for (i,j) in s_A(Q, A)])
+        return (1.0 / m) * sum([P(Q, tuple(a for a in A if a != Q[i][j]), m)
+                                for (i, j) in s_A(Q, A)])
+
 
 def P_map(Q):
     '''
@@ -51,8 +49,9 @@ def P_map(Q):
     '''
     m = len(Q)
     m_range = range(m)
-    p = {A : P(Q, A, m) for A in generate_A(m_range)}
+    p = {A: P(Q, A, m) for A in generate_A(m_range)}
     return p
+
 
 def delta_prime(Q):
     '''
@@ -63,7 +62,8 @@ def delta_prime(Q):
     m = len(Q)
     m_range = [row[0] for row in Q]
     set_A = generate_A(m_range)
-    return (1.0/(m**2)) * sum(P(Q, A, m)*len(s_A(Q, A)) for A in set_A)
+    return (1.0 / (m ** 2)) * sum(P(Q, A, m) * len(s_A(Q, A)) for A in set_A)
+
 
 def d_prime(Q, n):
     '''
@@ -73,24 +73,32 @@ def d_prime(Q, n):
     m = len(Q)
     m_range = [row[0] for row in Q]
     assert n <= m
-    set_A = [A for A in generate_A(m_range) if len(A) == n-1]
-    return (1.0/m) * sum(P(Q, A, m) * len(s_A(Q, A)) for A in set_A)
+    set_A = [A for A in generate_A(m_range) if len(A) == n - 1]
+    return (1.0 / m) * sum(P(Q, A, m) * len(s_A(Q, A)) for A in set_A)
 
-def profile_delta_prime(Q):
-    delta_prime(Q)
+
+def search_random(m, N):
+    from operator import itemgetter
+    import matplotlib.pyplot as plt
+    import random
+
+    random.seed(1234)
+
+    score_Q = [(delta_prime(Q), Q) for Q in [random_Q(m) for _ in range(N)]]
+
+    min_score, min_Q = min(score_Q, key=itemgetter(0))
+    max_score, max_Q = max(score_Q, key=itemgetter(0))
+
+    print('Best score:', min_score, min_Q)
+    print('Worst score:', max_score, max_Q)
+
+    plt.hist(list(zip(*score_Q))[0], bins=100, normed=True)
+    plt.xlabel('Number probes')
+    plt.ylabel('Density')
+    plt.savefig('m%d_scores.png' % m)
+
     return
 
-def profile():
-    cProfile.run('profile_delta_prime(random_Q(3))')
-    cProfile.run('profile_delta_prime(random_Q(4))')
-    cProfile.run('profile_delta_prime(random_Q(5))')
-    cProfile.run('profile_delta_prime(random_Q(6))')
-    cProfile.run('profile_delta_prime(random_Q(7))')
-    cProfile.run('profile_delta_prime(random_Q(8))')
-    cProfile.run('profile_delta_prime(random_Q(9))')
-    cProfile.run('profile_delta_prime(random_Q(10))')
-    return 
 
 if __name__ == '__main__':
-    profile()
-    
+    search_random(10, 10000)
